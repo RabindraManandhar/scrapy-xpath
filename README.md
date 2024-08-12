@@ -11,15 +11,11 @@ Exercise for scraping using scrapy, parsing a real website, extracting key infor
 
 Objective: to extract the names and medal (or position) from the top three High Jumpers in the World Junior Championships as presented in their respective Wikipedia pages.
 
-Install _requirements.txt_ in a virtual environment
-
 ```
 python3 -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
+source venv/bin/activate OR # .\venv\Scripts\Activate
+pip install scrapy
 ```
-
-Note: You might get installation warnings about `PyDispatcher` or `Protego`. Ensure your installation works correctly by opening a Python prompt and importing the `scrapy` library. It should work without issues.
 
 Get started with scrapy: https://docs.scrapy.org/en/latest/intro/tutorial.html
 
@@ -45,12 +41,19 @@ scrapy shell  "./html/1992_World_Junior_Championships_in_Athletics_–_Men's_hig
 
 Note that the quotes are required for the shell to work and escape the single quote within the HTML page. The shell uses a IPython as the shell (Jupyter-like output in the terminal) so be aware that when copying and pasting, you might need to reformat.
 
-Confirm that the `response.url` points to the local path:
+Confirm that the `response` points to the local path:
 
 ```
-In [1]: response.url
-Out[1]: 'file:///Users/alfredo/code/coursera/scraping-to-be-moved/html/1992_World_Junior_Championships_in_Athletics_%E2%80%93_Men%27s_high_jump'
+>>> response
+<200 file:///D:/Essentials%20of%20Data%20Engineering/Scripting%20with%20Python%20and%20SQL%20for%20Data%20Engineering/parser_example/lab/scrapy-xpath/html/1992_World_Junior_Championships_in_Athletics_%E2%80%93_Men%27s_high_jump>
 ```
+
+Next, we inspect the tables and its length
+
+>>> response.xpath('//table')
+[<Selector query='//table' data='<table class="sidebar-games-events si...'>, <Selector query='//table' data='<table class="wikitable" style="text-...'>, <Selector query='//table' data='<table class="wikitable sortable" sty...'>, <Selector query='//table' data='<table class="wikitable sortable" sty...'>, <Selector query='//table' data='<table class="wikitable sortable" sty...'>, <Selector query='//table' data='<table class="nowraplinks mw-collapsi...'>]
+>>> len(response.xpath('//table'))
+6
 
 Next, try to find the interesting table that holds the data we need. The target table has 3 items in it (first, second, and third place), so one way to find out if we have the right one is to check how many elements there are in each table.
 
